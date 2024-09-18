@@ -281,11 +281,51 @@
     });
 
 	// Add export button
-    $('<button id="exportBans" class="submitbutton">Export Bans</button>').insertAfter('#all');
+    $('<button>', {
+        id: 'exportBans',
+        class: 'submitbutton',
+        text: 'Export Bans',
+        click: function(e) {
+            e.preventDefault();
+            const bannedCivsJson = exportBannedCivs();
+            const blob = new Blob([bannedCivsJson], {type: "application/json"});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'banned_civs.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    }).insertAfter('#all');
 
     // Add import button and file input
-    $('<button id="importBans" class="submitbutton">Import Bans</button>').insertAfter('#exportBans');
-    $('<input type="file" id="importFile" style="display:none;">').insertAfter('#importBans');
+    $('<button>', {
+        id: 'importBans',
+        class: 'submitbutton',
+        text: 'Import Bans',
+        click: function(e) {
+            e.preventDefault();
+            $('#importFile').click();
+        }
+    }).insertAfter('#exportBans');
+
+    $('<input>', {
+        id: 'importFile',
+        type: 'file',
+        style: 'display:none;',
+        change: function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    importBannedCivs(e.target.result);
+                };
+                reader.readAsText(file);
+            }
+        }
+    }).insertAfter('#importBans');
 
     // Export functionality
     $('#exportBans').click(function() {
