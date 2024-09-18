@@ -118,6 +118,11 @@ input, select {
     width: 100px;
     margin-left: 20px;
     cursor: pointer;
+    display: inline-block;  /* This ensures the buttons stay in line with others */
+}
+
+#buttons {
+    text-align: center;  /* This centers all buttons in the container */
 }
 
 #nqonly {
