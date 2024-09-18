@@ -149,6 +149,14 @@ input, select {
     width: 50px;
 }
 
+#exportBans, #importBans {
+    font-family: Montserrat;
+    border-radius: 15px;
+    width: 100px;
+    margin-left: 20px;
+    cursor: pointer;
+}
+
 .submitbutton {
 	font-family: Montserrat;
 	border-radius: 15px;
