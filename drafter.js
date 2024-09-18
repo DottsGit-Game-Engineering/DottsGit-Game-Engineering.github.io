@@ -138,6 +138,35 @@
 		
 		updateBanned(totalCivs, bannedCivs);
 	};
+
+	function updateBanned(totalAllowed, totalBanned) {
+		var titleHTML  = (totalAllowed - totalBanned) + " Allowed - " + totalBanned + " Banned";
+		
+		$(".selectorheadline").html(titleHTML );
+	}
+	// Function to export banned civs
+    function exportBannedCivs() {
+        const bannedCivs = [];
+        $.each(allCivs, function (index, value) {
+            if (!value) {
+                bannedCivs.push(index);
+            }
+        });
+        return JSON.stringify(bannedCivs);
+    }
+
+    // Function to import banned civs
+    function importBannedCivs(bannedCivsJson) {
+        const bannedCivs = JSON.parse(bannedCivsJson);
+
+        // Reset all civs
+        $('#reset').click();
+
+        // Ban the imported civs
+        bannedCivs.forEach(civ => {
+            $(`.${civ}`).click();
+        });
+    }
 	
 	//reset all to enabled
 	$('#reset').click(function() {
@@ -250,71 +279,43 @@
             $(this).prop("unchecked");
         }      
     });
-	function updateBanned(totalAllowed, totalBanned) {
-		var titleHTML  = (totalAllowed - totalBanned) + " Allowed - " + totalBanned + " Banned";
-		
-		$(".selectorheadline").html(titleHTML );
-	}
-	// Function to export banned civs
-	function exportBannedCivs() {
-		const bannedCivs = [];
-		$.each(allCivs, function (index, value) {
-			if (!value) {
-				bannedCivs.push(index);
-			}
-		});
-		return JSON.stringify(bannedCivs);
-	}
-
-	// Function to import banned civs
-	function importBannedCivs(bannedCivsJson) {
-		const bannedCivs = JSON.parse(bannedCivsJson);
-
-		// Reset all civs
-		$('#reset').click();
-
-		// Ban the imported civs
-		bannedCivs.forEach(civ => {
-			$(`.${civ}`).click();
-		});
-	}
 
 	// Add export button
-	$('<button id="exportBans">Export Bans</button>').insertAfter('#all');
+    $('<button id="exportBans" class="submitbutton">Export Bans</button>').insertAfter('#all');
 
-	// Add import button and file input
-	$('<button id="importBans">Import Bans</button>').insertAfter('#exportBans');
-	$('<input type="file" id="importFile" style="display:none;">').insertAfter('#importBans');
+    // Add import button and file input
+    $('<button id="importBans" class="submitbutton">Import Bans</button>').insertAfter('#exportBans');
+    $('<input type="file" id="importFile" style="display:none;">').insertAfter('#importBans');
 
-	// Export functionality
-	$('#exportBans').click(function() {
-		const bannedCivsJson = exportBannedCivs();
-		const blob = new Blob([bannedCivsJson], {type: "application/json"});
-		const url = URL.createObjectURL(blob);
-		const a = document.createElement('a');
-		a.href = url;
-		a.download = 'banned_civs.json';
-		document.body.appendChild(a);
-		a.click();
-		document.body.removeChild(a);
-		URL.revokeObjectURL(url);
-	});
+    // Export functionality
+    $('#exportBans').click(function() {
+        const bannedCivsJson = exportBannedCivs();
+        const blob = new Blob([bannedCivsJson], {type: "application/json"});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'banned_civs.json';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    });
 
-	// Import functionality
-	$('#importBans').click(function() {
-		$('#importFile').click();
-	});
+    // Import functionality
+    $('#importBans').click(function() {
+        $('#importFile').click();
+    });
 
-	$('#importFile').change(function(event) {
-		const file = event.target.files[0];
-		if (file) {
-			const reader = new FileReader();
-			reader.onload = function(e) {
-				importBannedCivs(e.target.result);
-			};
-			reader.readAsText(file);
-		}
-	});
+    $('#importFile').change(function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                importBannedCivs(e.target.result);
+            };
+            reader.readAsText(file);
+        }
+    });
 	// make the draft
 	$('#create').click(function() {	
 		$('#create').attr("disabled", false);
