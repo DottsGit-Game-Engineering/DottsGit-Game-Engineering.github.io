@@ -112,6 +112,14 @@ input, select {
 	text-align: left;
 }
 
+#exportBans, #importBans {
+    font-family: Montserrat;
+    border-radius: 15px;
+    width: 100px;
+    margin-left: 20px;
+    cursor: pointer;
+}
+
 #nqonly {
 	font-family: Montserrat;
 	font-size: 15px;
@@ -147,14 +155,6 @@ input, select {
     clear:left;
     text-align:left;
     width: 50px;
-}
-
-#exportBans, #importBans {
-    font-family: Montserrat;
-    border-radius: 15px;
-    width: 100px;
-    margin-left: 20px;
-    cursor: pointer;
 }
 
 .submitbutton {
